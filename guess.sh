@@ -21,6 +21,7 @@ function game {
 
 	showRandom
 
+	echo
 	read -p "Guess a random $diff digit number! " guess
 	while [[ $guess != $secret ]]
 	do
@@ -99,4 +100,29 @@ function showRandom {
 		echo "$secret is 5 numbers long"
 	fi
 }
-game
+
+if [[ -z "$1" ]]; then
+	echo
+	echo -e "Welcome to my Bash Guessing Game!"
+	echo "You will be offered a choice of difficulty from 1-5. The higher the difficulty, the more digits will be in the random number, i.e. Difficuty 1 is a 1-digit number from 1 to 9, but difficulty 5 will be a 5 digit number from 10000 to 99999."	
+	echo -e "Your best score (lowest number of guesses), as well as your highest difficulty completed will be stored in a file named 'score'."
+	echo
+	echo -e "To play the game, type \e[32m./guess.sh play\e[0m. To delete your score file, type \e[33m./guess.sh reset\e[0m."
+	echo
+else
+	if [[ "$1" == "reset" ]]; then
+		read -p "Are you sure you want to delete your lowest score and highest difficulty? (y/n) " -n 1 -r
+		echo
+		if [[ $REPLY =~ ^[Yy]$ ]]
+		then
+			rm score
+			echo "Score file has been deleted."
+			echo
+		else
+			echo "Your score file has not been deleted."
+			echo
+		fi
+	elif [[ "$1" == "play" ]]; then 
+		game
+	fi
+fi
